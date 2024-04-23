@@ -3,7 +3,11 @@ const crypto = require("crypto");
 const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const sequelize = require("./util/database");
-const User = require("./models/User");
+
+
+const assocs = require("./assocs");
+assocs();
+
 
 const app = express();
 
@@ -18,9 +22,11 @@ app.use(authRoutes);
 
 //catch 404, then forward to error handler
 app.use((req, res, next) => {
-    const error = new Error("Sorry mate, the resource you are looking for could not be found");
-    error.status = 404;
-    next(error);
+  const error = new Error(
+    "Sorry mate, the resource you are looking for could not be found"
+  );
+  error.status = 404;
+  next(error);
 });
 
 //catch all error handler. should always be the last
@@ -32,6 +38,10 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
+
+
+
 
 //sync db and start server
 (async () => {

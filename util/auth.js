@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   const authHeader = req.header("Authorization");
 
   if (!authHeader || !authHeader.startsWith("Bearer")) {
@@ -23,9 +24,18 @@ module.exports = (req, res, next) => {
 
   //verify token
   try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = user;
-    next();
+    const result = jwt.verify(token, process.env.JWT_SECRET);
+
+    const exists = await User.findOne({ where: { email: result.user.email } });
+
+    if (exists) {
+      req.user = result.user;
+      next();
+    } else {
+      const error = new Error("You are not authorised to access this resource");
+      error.status = 401;
+      next(error);
+    }
   } catch (error) {
     error.status = 401;
     next(error);

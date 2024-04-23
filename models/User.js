@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const seq = require("../util/database");
+// const BlogPost = require("./BlogPost");
 
 const User = seq.define('user',{
     id: {
@@ -31,5 +32,7 @@ const User = seq.define('user',{
     updatedAt: "updated_at",
   }
 );
+
+// User.hasMany(BlogPost);
 
 module.exports = User;

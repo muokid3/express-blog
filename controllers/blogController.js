@@ -39,12 +39,62 @@ exports.createBlogPost = async (req, res, next) => {
   });
 };
 
-exports.updateBlogPost = (req, res, next) => {
+exports.updateBlogPost = async (req, res, next) => {
   const id = req.params.id;
-  res.json({ message: "Update post with ID " + id, body: req.body });
+
+  const blogPost = await BlogPost.findByPk(id);
+  if (!blogPost)
+    return res.status(404).json({
+      success: false,
+      message: "BlogPost with ID " + id + " Not Found",
+    });
+
+  await BlogPost.update(
+    {
+      title: req.body.title,
+      content: req.body.content,
+      image_url: req.body.image_url,
+    },
+    {
+      where: {
+        id: id,
+      },
+    }
+  );
+
+  const cat = await Category.findByPk(req.body.category_id);
+  blogPost.addCategory(cat);
+
+  res.json({ success: true, message: "Updated post with ID " + id });
 };
 
-exports.deleteBlogPost = (req, res, next) => {
+exports.deleteBlogPost = async (req, res, next) => {
   const id = req.params.id;
-  res.json({ message: "Delete with ID" + id });
+
+  const blogPost = await BlogPost.findByPk(id);
+
+  if (!blogPost)
+    return res.status(404).json({
+      success: false,
+      message: "BlogPost with ID " + id + " Not Found",
+    });
+
+  const isMine = blogPost.userId === parseInt(req.user.id) ? true : false;
+
+  if (!isMine)
+    return res.status(401).json({
+      success: false,
+      message: "You are not authorised to delete this BlogPost",
+    });
+
+  await BlogPost.destroy({
+    where: {
+      id: id,
+    },
+  });
+
+  res.json({
+    success: true,
+    message: "Deleted blogpost with ID" + id,
+  });
 };

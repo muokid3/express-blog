@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
       "Auth not provided. You are not authorised to access this resource"
     );
     error.status = 401;
-    next(error);
+    return next(error);
   }
 
   const token = authHeader.replace("Bearer ", "");
@@ -19,7 +19,7 @@ module.exports = async (req, res, next) => {
       "Authorisation token was not provided. Access denied."
     );
     error.status = 401;
-    next(error);
+    return next(error);
   }
 
   //verify token
@@ -34,10 +34,10 @@ module.exports = async (req, res, next) => {
     } else {
       const error = new Error("You are not authorised to access this resource");
       error.status = 401;
-      next(error);
+      return next(error);
     }
   } catch (error) {
     error.status = 401;
-    next(error);
+    return next(error);
   }
 };

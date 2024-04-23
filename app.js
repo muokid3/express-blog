@@ -4,10 +4,8 @@ const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const sequelize = require("./util/database");
 
-
-const assocs = require("./assocs");
+const assocs = require("./util/assocs");
 assocs();
-
 
 const app = express();
 
@@ -38,10 +36,6 @@ app.use((err, req, res, next) => {
     message,
   });
 });
-
-
-
-
 
 //sync db and start server
 (async () => {

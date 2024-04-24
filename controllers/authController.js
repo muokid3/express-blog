@@ -1,10 +1,21 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { validationResult } = require("express-validator");
 
 require("dotenv").config();
 
 exports.login = async (req, res, next) => {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      errors: errors.array(),
+    });
+  }
+
   const user = await User.findOne({ where: { email: req.body.email } });
 
   if (user) {
@@ -34,6 +45,16 @@ exports.login = async (req, res, next) => {
 };
 
 exports.signup = async (req, res, next) => {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      errors: errors.array(),
+    });
+  }
+
   const salt = await bcrypt.genSalt(10);
 
   const exists = await User.findOne({

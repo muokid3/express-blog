@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 
 //catch all error handler. should always be the last
 app.use((err, req, res, next) => {
+  console.log(err);
   const status = err.status || 500;
   const message = err.message || "A fatal server error occcured";
   res.status(status).json({

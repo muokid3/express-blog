@@ -11,7 +11,7 @@ const app = express();
 
 require("dotenv").config({ path: __dirname + "/.env" });
 const PORT = process.env.PORT || 5000;
-//console.log(crypto.randomBytes(32).toString('hex'));
+// console.log(crypto.randomBytes(32).toString("hex"));
 
 app.use(express.json());
 

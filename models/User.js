@@ -1,8 +1,9 @@
-const Sequelize = require("sequelize");
+const { Sequelize } = require("sequelize");
 const seq = require("../util/database");
-// const BlogPost = require("./BlogPost");
 
-const User = seq.define('user',{
+const User = seq.define(
+  "user",
+  {
     id: {
       type: Sequelize.DataTypes.BIGINT,
       primaryKey: true,
@@ -33,6 +34,5 @@ const User = seq.define('user',{
   }
 );
 
-// User.hasMany(BlogPost);
 
 module.exports = User;

@@ -1,7 +1,5 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../util/database");
-// const User = require("./User");
-// const Category = require("./Category");
 
 const BlogPost = sequelize.define(
   "blog_post",
@@ -30,12 +28,5 @@ const BlogPost = sequelize.define(
   }
 );
 
-
-
-// BlogPost.belongsTo(User);
-
-// BlogPost.belongsToMany(Category, {
-//   through: "blog_category",
-// });
 
 module.exports = BlogPost;

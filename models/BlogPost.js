@@ -9,7 +9,10 @@ const BlogPost = sequelize.define(
       autoIncrement: true,
       type: Sequelize.DataTypes.BIGINT,
     },
-    image_url: {
+    file_location: {
+      type: Sequelize.DataTypes.TEXT,
+    },
+    file_name: {
       type: Sequelize.DataTypes.TEXT,
     },
     title: {

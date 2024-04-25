@@ -3,6 +3,7 @@ const blogController = require("../controllers/blogController");
 const auth = require("../middleware/auth");
 const { body, param } = require("express-validator");
 const validate = require("../middleware/validate");
+const upload = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -22,10 +23,10 @@ router.get(
 router.post(
   "/blog",
   auth,
+  upload.single("image"),
   [
     body("title").notEmpty().withMessage("Blog title is required"),
     body("content").notEmpty().withMessage("Blog content is required"),
-    body("image_url").notEmpty().withMessage("Image URL is required"),
     body("categoryId").notEmpty().withMessage("Category ID is required"),
   ],
   validate,

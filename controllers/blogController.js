@@ -20,10 +20,17 @@ exports.getBlogPost = async (req, res, next) => {
 };
 
 exports.createBlogPost = async (req, res, next) => {
+  
+  console.log(req.file);
+
+  const fileName = req.file.key;
+  const fileLocation = req.file.location;
+  
   const fields = {
     title: req.body.title,
     content: req.body.content,
-    image_url: req.body.image_url,
+    file_location: fileLocation,
+    file_name: fileName,
   };
   const blog = await BlogPost.create(fields);
 

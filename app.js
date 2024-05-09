@@ -3,6 +3,8 @@ const crypto = require("crypto");
 const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const sequelize = require("./util/database");
+const passport = require("passport");
+const jwtStrategy = require("./middleware/passport-config");
 
 const assocs = require("./util/assocs");
 assocs();
@@ -14,6 +16,9 @@ const PORT = process.env.PORT || 5000;
 // console.log(crypto.randomBytes(32).toString("hex"));
 
 app.use(express.json());
+app.use(passport.initialize());
+passport.use("jwt", jwtStrategy);
+
 
 app.use(blogRoutes);
 app.use(authRoutes);
@@ -37,6 +42,8 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
+
 
 //sync db and start server
 (async () => {

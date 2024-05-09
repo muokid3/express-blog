@@ -1,13 +1,18 @@
 const express = require("express");
 const blogController = require("../controllers/blogController");
-const auth = require("../middleware/auth");
+//const auth = require("../middleware/auth");
+const passport = require("passport");
 const { body, param } = require("express-validator");
 const validate = require("../middleware/validate");
 const upload = require("../middleware/upload");
 
 const router = express.Router();
 
-router.get("/blog", blogController.getBlogPosts);
+router.get(
+  "/blog",
+  passport.authenticate("jwt", { session: false }),
+  blogController.getBlogPosts
+);
 router.get(
   "/blog/:id",
   [
@@ -22,7 +27,7 @@ router.get(
 );
 router.post(
   "/blog",
-  auth,
+  passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   [
     body("title").notEmpty().withMessage("Blog title is required"),
@@ -34,7 +39,7 @@ router.post(
 );
 router.put(
   "/blog/:id",
-  auth,
+  passport.authenticate("jwt", { session: false }),
   [
     param("id").isNumeric().withMessage("Invalid Blog ID provided"),
     body("title").trim().notEmpty().withMessage("Blog title is required"),
@@ -44,6 +49,10 @@ router.put(
   validate,
   blogController.updateBlogPost
 );
-router.delete("/blog/:id", auth, blogController.deleteBlogPost);
+router.delete(
+  "/blog/:id",
+  passport.authenticate("jwt", { session: false }),
+  blogController.deleteBlogPost
+);
 
 module.exports = router;

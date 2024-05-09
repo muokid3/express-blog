@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const { validationResult } = require("express-validator");
 
 require("dotenv").config();
 
@@ -15,7 +14,9 @@ exports.login = async (req, res, next) => {
     );
 
     if (passwordValid) {
-      const token = jwt.sign({ user }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: "1y",
+      });
       res.status(200).json({
         success: true,
         token,

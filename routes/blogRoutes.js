@@ -5,6 +5,7 @@ const passport = require("passport");
 const { body, param } = require("express-validator");
 const validate = require("../middleware/validate");
 const upload = require("../middleware/upload");
+const authenticate = require("../middleware/authenticate");
 
 const router = express.Router();
 
@@ -14,21 +15,7 @@ const router = express.Router();
 //   blogController.getBlogPosts
 // );
 
-router.get("/blogs", function (req, res, next) {
-  passport.authenticate("jwt", function (err, user, info) {
-    // if (err) {
-    //   return next(err); // Will generate a 500 error
-    // }
-   
-    if (!user) {
-      // Custom error message for unauthorized access
-      const err = new Error("Invalid email address or password");
-      err.status = 401;
-      return next(err);
-    }
-  })(req, res, next),
-  blogController.getBlogPosts;
-});
+router.get("/blogs", authenticate, blogController.getBlogPosts);
 
 router.get(
   "/blog/:id",

@@ -26,10 +26,10 @@ module.exports = async (req, res, next) => {
   try {
     const result = jwt.verify(token, process.env.JWT_SECRET);
 
-    const exists = await User.findOne({ where: { email: result.user.email } });
+    const exists = await User.findOne({ where: { id: result.id } });
 
     if (exists) {
-      req.user = result.user;
+      req.user = exists;
       next();
     } else {
       const error = new Error("You are not authorised to access this resource");
@@ -37,7 +37,7 @@ module.exports = async (req, res, next) => {
       return next(error);
     }
   } catch (error) {
-    error.status = 401;
+    //error.status = 401;
     return next(error);
   }
 };

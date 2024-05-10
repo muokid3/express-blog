@@ -8,11 +8,28 @@ const upload = require("../middleware/upload");
 
 const router = express.Router();
 
-router.get(
-  "/blog",
-  passport.authenticate("jwt", { session: false }),
-  blogController.getBlogPosts
-);
+// router.get(
+//   "/blogs",
+//   passport.authenticate("jwt", { session: false }),
+//   blogController.getBlogPosts
+// );
+
+router.get("/blogs", function (req, res, next) {
+  passport.authenticate("jwt", function (err, user, info) {
+    // if (err) {
+    //   return next(err); // Will generate a 500 error
+    // }
+   
+    if (!user) {
+      // Custom error message for unauthorized access
+      const err = new Error("Invalid email address or password");
+      err.status = 401;
+      return next(err);
+    }
+  })(req, res, next),
+  blogController.getBlogPosts;
+});
+
 router.get(
   "/blog/:id",
   [

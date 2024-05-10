@@ -15,7 +15,7 @@ exports.login = async (req, res, next) => {
 
     if (passwordValid) {
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "1y",
+        expiresIn: "20s",
       });
       res.status(200).json({
         success: true,
@@ -28,7 +28,7 @@ exports.login = async (req, res, next) => {
       });
     }
   } else {
-    res.status(404).json({
+    res.status(401).json({
       success: false,
       message: "We could not find a user with the given credentials",
     });
